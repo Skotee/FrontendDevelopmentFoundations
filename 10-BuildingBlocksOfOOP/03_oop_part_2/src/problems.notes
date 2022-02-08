@@ -1,0 +1,5 @@
+1. I'm not sure how I should make PagesIterable mixin. I found on Internet two sources how to implement them, in 2 diffent ways: (https://justinfagnani.com/2015/12/21/real-mixins-with-javascript-classes/) 2: (https://mariusschulz.com/blog/mixin-classes-in-typescript)
+
+2. Should I have class `Book extends Item ` or  `Book extends Item implements Iterable`, or `Book extends Item implements PagesIterable`
+
+3. I'm not sure, how these  `appropriate methods to communicate with iterator` should look ?
