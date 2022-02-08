@@ -10,13 +10,13 @@ import { Pages } from './Pages';
 export class Book extends Item {
     title: string;
     author: string;
-    pages: Pages[];
+    pages: Pages;
 
     constructor(title: string, author: string, pages: Pages) {
-        super();
+        super(pages);
         this.title = title;
         this.author = author;
-        this.pages = [];
+        this.pages = pages;
     }
 
     public get getTitle(): string {
@@ -28,6 +28,6 @@ export class Book extends Item {
     }
 
     toString(): string {
-        return `Book: ${this.title}, by ${this.author}, with number of pages ${this.pages}`;
+        return `Book: ${this.getTitle}, by ${this.getAuthor}, with number of pages ${this.pages.getLength()}`;
     }
 }

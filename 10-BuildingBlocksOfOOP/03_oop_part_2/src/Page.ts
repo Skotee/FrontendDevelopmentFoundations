@@ -12,4 +12,8 @@ export class Page {
         this.pageType = pageType;
         this.pageMaterial = pageMaterial;
     }
+
+    toString(): string {
+        return `here is page with ${this.pageType} and it\'s material is ${this.pageMaterial}`;
+    }
 }

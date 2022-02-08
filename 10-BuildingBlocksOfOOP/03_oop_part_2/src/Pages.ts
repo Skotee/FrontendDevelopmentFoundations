@@ -6,28 +6,12 @@
 import { Page } from './Page';
 
 export class Pages {
-    constructor(page: Page[]) {
-        page = [];
+	pages: Page[]
+    constructor(pages: Page[]) {
+        this.pages = pages;
     }
-    iteratorDriver() {}
+
+		getLength(): number {
+			return this.pages.length;
+		}
 }
-
-// let PagesIterableMixin = {
-//     [Symbol.iterator](): Iterator<number>  {
-//         let counter = 0;
-//         let nextIndex = 0;
-//         return  {
-//             next: () => {
-//                 if ( nextIndex <= 0 ) {
-//                     let result = { value: nextIndex,  done: false }
-//                     nextIndex += 1;
-//                     counter++;
-//                     return result;
-//                 }
-//                 return { value: counter, done: true };
-//             }
-//         }
-//     }
-//   };
-
-// Object.assign(Pages.prototype, PagesIterableMixin);

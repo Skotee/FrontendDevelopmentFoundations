@@ -2,63 +2,61 @@
 // a.	You can use 3rd library or Symbol.iterator to implement PagesIterable mixin
 // b.	the “for..of”, spread operator (“…”) and other data consumers should work with your iterables (Book, Magazine, Comics)
 
-import { Item } from "./Item";
+import { Item } from './Item';
+import { Page } from './Page';
+import { Pages } from './Pages';
 
+export class PagesIterable {
+    item: Item;
+    page: Page;
 
-// To get started, we need a type which we'll use to extend
-// other classes from. The main responsibility is to declare
-// that the type being passed in is a class.
- 
-// type Constructor = new (...args: any[]) => {};
- 
-// This mixin adds a scale property, with getters and setters
-// for changing it with an encapsulated private property:
- 
-// function PagesIterable<TBase extends Constructor>(Base: TBase) {
-//   return class Scaling extends Base {
-//     // Mixins may not declare private/protected properties
-//     // however, you can use ES2020 private fields
-//     _scale = 1;
- 
-//     setScale(scale: number) {
-//       this._scale = scale;
-//     }
- 
-//     get scale(): number {
-//       return this._scale;
-//     }
-//   };
-// }
+    constructor(item: Item, page: Page) {
+        this.item = item;
+        this.page = page;
+    }
 
-
-type Constructor<T = {}> = new (...args: any[]) => T;
-
-function PagesIterableMixin<TBase extends Constructor>(Base: TBase) {
-  return class extends Base {
-    [Symbol.iterator](): Iterator<number>  {
-      return {
-        next: function () {
-            return {
-              value: 1,
-              done: true
-            };
-        }
-    };
-  }
-  };
+    toString(): string {
+        return this.item.toString() + ', ' + this.page.toString();
+    }
 }
 
+export class ItemIterator implements Iterator<PagesIterable> {
+    pages: Pages;
+    item: Item;
+    currentIndex = 0;
 
-// let counter = 0;
-// let nextIndex = 0;
-// return  {
-//   next: () => {
-//       if ( nextIndex <= 0 ) {
-//           let result = { value: nextIndex,  done: false }
-//           nextIndex += 1;
-//           counter++;
-//           return result;
-//       }
-//       return { value: counter, done: true };
-//   }
-// }
+    constructor(pages: Pages, item: Item) {
+        this.pages = pages;
+        this.item = item;
+    }
+
+    next(): IteratorResult<PagesIterable> {
+        if (this.pages.getLength() - 1 === this.currentIndex) {
+            return new PageIteratorReturnResult(this.pages.pages[this.currentIndex], this.item, true);
+        }
+
+        let item = new PageIteratorYieldResult(this.pages.pages[this.currentIndex], this.item, false);
+        this.currentIndex++;
+        return item;
+    }
+}
+
+export class PageIteratorYieldResult implements IteratorYieldResult<PagesIterable> {
+    done?: false;
+    value: PagesIterable;
+
+    constructor(page: Page, item: Item, done: false) {
+        this.value = new PagesIterable(item, page);
+        this.done = done;
+    }
+}
+
+export class PageIteratorReturnResult implements IteratorReturnResult<PagesIterable> {
+    done: true;
+    value: PagesIterable;
+
+    constructor(page: Page, item: Item, done: true) {
+        this.value = new PagesIterable(item, page);
+        this.done = done;
+    }
+}

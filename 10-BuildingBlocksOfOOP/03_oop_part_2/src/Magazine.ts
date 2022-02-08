@@ -2,7 +2,7 @@
 // a.	properties: “pages”, “title”
 // b.	setters and getters for “title”
 // c.	“toString” -> “Magazine: {title} with number of pages: {number}”
-// d.	“pages” property keeps instance of Pages class //TODO jak?
+// d.	“pages” property keeps instance of Pages class
 
 import { Item } from './Item';
 import { Pages } from './Pages';
@@ -12,9 +12,9 @@ export class Magazine extends Item {
     pages: Pages;
 
     constructor(title: string, pages: Pages) {
-        super();
+        super(pages);
         this.title = title;
-        this.pages = new Pages([]);
+        this.pages = pages;
     }
 
     public set setTitle(title: string) {
@@ -25,21 +25,7 @@ export class Magazine extends Item {
         return this.title;
     }
 
-    // [Symbol.iterator]() {
-    //   let values = Object.values(this);
-    //   let index = 0;
-    //   return {
-    //     next() {
-    //       if (index < values.length) {
-    //         let val = values[index];
-    //         index++;
-    //         return { value: val, done: false };
-    //       } else return { done: true };
-    //     }
-    //   };
-    // }
-
     toString(): string {
-        return `Magazine: ${this.title} with number of pages: ${this.pages}`;
+        return `Magazine: ${this.getTitle} with number of pages: ${this.pages.getLength()}`;
     }
 }

@@ -8,17 +8,17 @@ import { Item } from './Item';
 import { Pages } from './Pages';
 
 export class Comics extends Item {
-    pages: Pages;
     title: string;
     author: string;
     artist: string;
+    pages: Pages;
 
     constructor(title: string, author: string, artist: string, pages: Pages) {
-        super();
+        super(pages);
         this.title = title;
         this.author = author;
         this.artist = artist;
-        this.pages = new Pages([]); //TODO poprawić
+        this.pages = pages;
     }
 
     public set setTitle(title: string) {
@@ -46,6 +46,8 @@ export class Comics extends Item {
     }
 
     toString(): string {
-        return `“Comics: ${this.getTitle} by ${this.getAuthor}, the artist is ${this.getArtist}, number of pages: ${this.pages}`;
+        return `“Comics: ${this.getTitle} by ${this.getAuthor}, the artist is ${
+            this.getArtist
+        }, number of pages: ${this.pages.getLength()}`;
     }
 }
