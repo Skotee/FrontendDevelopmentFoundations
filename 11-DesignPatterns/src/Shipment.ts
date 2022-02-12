@@ -1,48 +1,31 @@
 //  will represent the object being shipped.
 import { log } from "./decorators";
 import { ShipperImplementor, ShipperStrategy } from "./Shipper";
-import { State } from "./State";
+import { state, State } from "./State";
 
-enum enumWeight {
-  airEast = 15,
-  chicagoSprint = 160,
-  pacificParcel = 160,
+export enum ShipmentType {
+  Letter = "letter",
+  Package = "package",
+  Oversized = "oversized",
 }
 
-type WarningsType = {
-  fragile: string;
-  doNotLeave: string;
-  returnReceiptRequested: string;
-};
-
-// export const Warnings = {
-//   fragile: "**MARK FRAGILE**",
-//   doNotLeave: "**MARK DO NOT LEAVE IF ADDRESS NOT AT HOME**",
-//   returnReceiptRequested: "**MARK RETURN RECEIPT REQUESTED**	",
-// };
-
-export enum Warnings {
-  fragile = "**MARK FRAGILE**",
-  doNotLeave = "**MARK DO NOT LEAVE IF ADDRESS NOT AT HOME**",
-  returnReceiptRequested = "**MARK RETURN RECEIPT REQUESTED**	",
+export enum ShipmentTypeMaxWeight {
+  Letter = 15,
+  Package = 160,
 }
 
-//typeof operator gives you the type of an object. //when we don't know the type of an object or we just have a value and not a type of that value like the following? - This is where we use keyof typeof together.
-// second explanatation:
-// keyof typeof will infer the type of a javascript object and return a type that is the union of its keys. Because it can infer the exact value of the keys it can return a union of their literal types instead of just returning "string".
-
-export function chooseWarningsLabels(options: string[]) {
-  options.forEach((element: string) => {
-    // console.log(`${Warnings[element as keyof typeof Warnings]}`); //this one works
-    return `\n ${Warnings[element as keyof typeof Warnings]}`; //don't know why it doesn't work //TODO later
-  });
+export function chooseShipmentType(): ShipmentType {
+  if (state.weight < ShipmentTypeMaxWeight.Letter) return ShipmentType.Letter;
+  if (state.weight <= ShipmentTypeMaxWeight.Package)
+    return ShipmentType.Package;
+  return ShipmentType.Oversized;
 }
 
 export class Shipment {
   state: State;
   implementor: ShipperImplementor;
   private strategy: ShipperStrategy;
-  static idCounter: number = 0;
+  idCounter: number = 0;
   constructor(
     state: State,
     strategy: ShipperStrategy,
@@ -57,13 +40,14 @@ export class Shipment {
     this.strategy.getCost();
   }
 
-  public callIt(s: String): void {
+  public getBridgeCost(type: string): number {
+    console.log("Error");
     throw new Error("This method is abstract!");
   }
 
   getShiphmentId(): number {
     //for now (Step 1), just increases a static int by one and returns it but in the future will get the real shipment ID.
-    return ++Shipment.idCounter;
+    return ++this.idCounter;
   }
 
   @log

@@ -13,12 +13,12 @@ export const state : State = {
   toAddress: 'toAdress',
   fromAddress: 'fromAdress',
   toZipCode: '54321',
-  fromZipCode: '12345',
-  weight: 21
+  fromZipCode: '12345', // change first number to see how price is changing
+  weight: 21, // ounces // 0 <= 15 -> Letter // 15 < x <=160 -> package // 160 < x -> oversized
+  marks: ['Fragile', 'Do Not Leave'],
 }
 
 // State object that will come from the end user via the GUI will have following interface:
-
 
 // ●	shipmentId (a number that represents an existing ID, or 0, which means you must generate a new, unique ID at construction time)
 // ●	toAddress (a string containing street, city, and state) – should be changeable
