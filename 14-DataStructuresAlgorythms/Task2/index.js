@@ -112,15 +112,15 @@ class Graph {
   graph.floydWarshall(sizeOfGraph);
   
   let path;
-  // Path from node 1 to 3
+ 
   document.write("Shortest path from 1 to 3: ");
-  path = graph.constructPath(1, 2);
+  path = graph.constructPath(1, 3);
   printPath(path);
-  // Path from node 0 to 2
-  document.write("Shortest path from 0 to 2: ");
+
+  document.write("Shortest path from 0 to 5: ");
   path = graph.constructPath(0, 5);
   printPath(path);
-  // Path from node 3 to 2
+
   document.write("Shortest path from 3 to 2: ");
   
   path = graph.constructPath(3, 2);
