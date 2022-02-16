@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
   <script type="module" src="currencies.js"></script>
-  <title>Getting Started</title>
+  <title>Currency Converter</title>
 </head>
 
 <body>
@@ -26,9 +26,9 @@
       <div id="contentDiv"></div>
     </div>
     <div class="content" id="content-2">
-      <div id="contentSuwakiDiv"></div>
+      <div id="contentSlidersDiv"></div>
     </div>
-    <script id="grocery-template" type="text/x-handlebars-template">
+    <script id="inputs-template" type="text/x-handlebars-template">
         <div>
           <input type="radio" id="radioInputy1" name="radioInputy" value="similar" onclick="handleChangeMode(this)" checked />
           <label for="radioInputy1">mode where the Euro amount is the same across all the panels with different currencies</label>
@@ -46,7 +46,6 @@
                 <br/>
                 <label for="firstInfo">1 Euro is</label>
                 <input type="number" class="euroRate" name="euroRate" value="{{this.rate}}" disabled/><span> {{this.name}}</span>
-
                 <br/>
                 <br/>
                 <label for="euroUniversal">EUR</label>
@@ -64,17 +63,17 @@
             </form>
           {{/each}}
       </script>
-    <script id="suwaki-template" type="text/x-handlebars-template">
+    <script id="sliders-template" type="text/x-handlebars-template">
         <div>
           <input
-            type="radio" id="radioSuwaki1" name="radioSuwaki" value="radioSuwaki1" onclick="handleChangeMode(this)" checked 
+            type="radio" id="radioSliders1" name="radioSliders" value="radioSliders1" onclick="handleChangeMode(this)" checked 
           />
-          <label for="radioSuwaki1">mode where the Euro amount is the same across all the panels with different currencies</label>
+          <label for="radioSliders1">mode where the Euro amount is the same across all the panels with different currencies</label>
         </div>
         <br />
         <div>
-          <input type="radio" id="radioSuwaki2" name="radioSuwaki" value="radioSuwaki2" onclick="handleChangeMode(this)"/>
-          <label for="radioSuwaki2">mode where the Euro amount/Currency amount is independent</label>
+          <input type="radio" id="radioSliders2" name="radioSliders" value="radioSliders2" onclick="handleChangeMode(this)"/>
+          <label for="radioSliders2">mode where the Euro amount/Currency amount is independent</label>
         </div>
         <br />
           {{#each currencies}}
@@ -82,7 +81,7 @@
             <fieldset class="slidersFieldsets">
               <legend>{{this.name}}</legend>
               <br />
-              <label for="firstInfo">2 Euro is</label>
+              <label for="firstInfo">1 Euro is</label>
               <input type="number" class="euroRate" name="euroRate" value="{{this.rate}}" disabled/><span> {{this.name}}</span>
               <br/>
               <br/>
@@ -123,185 +122,20 @@
   </div>
 
   <script type="text/javascript">
-    var templateInfo = document.getElementById("grocery-template").innerHTML;
-    var template = Handlebars.compile(templateInfo);
-    var templateSuwakiInfo = document.getElementById("suwaki-template").innerHTML;
-    var templateSuwaki = Handlebars.compile(templateSuwakiInfo);
-    var context = {
-      currencies: [
-        {
-          name: "USD",
-          rate: 1.25,
-        },
-        {
-          name: "PLN",
-          rate: 2,
-        },
-        {
-          name: "CHF",
-          rate: 3,
-        },
-      ],
-    };
-    var templateData = template(context);
-    var templateSuwakiData = templateSuwaki(context);
-    document.getElementById("contentDiv").innerHTML += templateData;
-    document.getElementById("contentSuwakiDiv").innerHTML += templateSuwakiData;
-
-    var euroRate = document.querySelectorAll('.euroRate');
-
-    var elmsEuroUniversal = document.querySelectorAll(".euroUniversal");
-    var elmsEuroUniversalSliders = document.querySelectorAll(".euroUniversalSliders");
-
-    var elmsCurrencyUniversal = document.querySelectorAll(".currencyUniversal");
-    var elmsCurrencyUniversalSliders = document.querySelectorAll(".currencyUniversalSliders");
-
-    var elmsEuroRangeOutput = document.querySelectorAll('output[name="euroRangeOutput"]');
-    var elmsCurrencyRangeOutput = document.querySelectorAll('output[name="currencyRangeOutput"]');
-
-    var flagAll = 'similar';
-
-    for (let i = 0; i < elmsCurrencyUniversal.length; i++) {
-      elmsCurrencyUniversal[i].value = elmsEuroUniversal[i].value * context.currencies[i].rate;
-    }
-
-    function rangeEuro() {
-      var x = document.getElementById("myRange").value;
-      document.getElementById("demo").innerHTML = x;
-    }
-
-    var inputsFieldsets = document.querySelectorAll('.inputsFieldsets')
-    var slidersFieldsets = document.querySelectorAll('.slidersFieldsets')
-
-
-    function individualChange() {
-      inputsFieldsets.forEach(element => {
-        const currency = element.querySelector('input[name="currencyUniversal"]');
-        const euro = element.querySelector('input[name="euroUniversal"]');
-        const euroRate = element.querySelector('input[name="euroRate"]').value;
-        
-        euro.addEventListener('input', () => {
-          currency.value = euro.value * euroRate;
-        })
-        currency.addEventListener('input', () => {
-          euro.value = currency.value / euroRate;
-        })
-      });
-    }
-
-    function individualChangeForSliders() {
-      slidersFieldsets.forEach(element => {
-        const currency = element.querySelector('input[name="currencyUniversalSliders"]');
-        const euro = element.querySelector('input[name="euroUniversalSliders"]');
-        const euroRate = element.querySelector('input[name="euroRate"]').value;
-        const outputEuro = element.querySelector('output[name="euroRangeOutput"]');
-        const outputCurrency = element.querySelector('output[name="currencyRangeOutput"]');
-
-        euro.addEventListener('input', () => {
-          currency.value = euro.value * euroRate;
-        })
-        currency.addEventListener('input', () => {
-          euro.value = currency.value / euroRate;
-        })
-
-        outputEuro.innerHTML = currency.value;
-        outputCurrency.innerHTML = euro.value;
-      });
-    }
-
-    function handleChangeMode(myRadio) {
-      flagAll = myRadio.value;
-      console.log('flagAll', flagAll);
-    }
-
-    function changeEuro(val) {
-      if (flagAll === 'similar') {
-        for (let i = 0; i < elmsEuroUniversal.length; i++) {
-          elmsEuroUniversal[i].value = val;
-        }
-        for (let i = 0; i < elmsCurrencyUniversal.length; i++) {
-          elmsCurrencyUniversal[i].value = elmsEuroUniversal[i].value * context.currencies[i].rate;
-        }
-      } else {  //(flagAll === 'uniqueRadio')
-        individualChange();
-      }
-    }
-
-    function changeEuroSliders(val) {
-      if (flagAll === 'similar') {
-        for (let i = 0; i < elmsEuroUniversalSliders.length; i++) {
-          elmsEuroUniversalSliders[i].value = val;
-          elmsEuroRangeOutput[i].innerHTML = elmsEuroUniversalSliders[i].value;
-          elmsCurrencyRangeOutput[i].innerHTML = elmsCurrencyUniversalSliders[i].value;
-        }
-        for (let i = 0; i < elmsCurrencyUniversalSliders.length; i++) {
-          elmsCurrencyUniversalSliders[i].value = elmsEuroUniversalSliders[i].value * context.currencies[i].rate;
-        }
-      } else {  //(flagAll === 'uniqueRadio')
-        individualChangeForSliders();
-      }
-    }
-
-    function changeCurrency(val) {
-      if (flagAll === 'similar') {
-        for (let i = 0; i < elmsCurrencyUniversal.length; i++) {
-          elmsCurrencyUniversal[i].value = val;
-        }
-        for (var i = 0; i < elmsEuroUniversal.length; i++) {
-          elmsEuroUniversal[i].innerHTML = elmsCurrencyUniversal[i].value / context.currencies[i].rate;
-        }
-      } else { //(flagAll === 'uniqueRadio')
-        individualChange();
-      }
-    }
-
-    function changeCurrencySliders(val) {
-      if (flagAll === 'similar') {
-        for (let i = 0; i < elmsCurrencyUniversalSliders.length; i++) {
-          elmsCurrencyUniversalSliders[i].value = val;
-          elmsCurrencyRangeOutput[i].innerHTML = elmsCurrencyUniversalSliders[i].value;
-          elmsEuroRangeOutput[i].innerHTML = elmsEuroUniversalSliders[i].value;
-        }
-        for (var i = 0; i < elmsEuroUniversalSliders.length; i++) {
-          elmsEuroUniversalSliders[i].value = elmsCurrencyUniversalSliders[i].value / context.currencies[i].rate;
-        }
-      } else { //(flagAll === 'uniqueRadio')
-        individualChangeForSliders();
-      }
-    }
-
-    // function Currency() {
-    //   y = document.getElementById("converter").value;
-    //   return y;
-    // }
-    // function Calculate() {
-    //   y = Currency();
-    // }
 
   </script>
+  <!-- <script src="../src/models/service.js"></script> -->
   <script src="bundle.js"></script>
-  <script>
-    const button1 = document.getElementById("button-1");
-    const button2 = document.getElementById("button-2");
-    const content1 = document.getElementById("content-1");
-    const content2 = document.getElementById("content-2");
-    button1.onclick = function openHTML() {
-      content1.style.transform = "translateX(80%)"; //show inputs
-      content2.style.transform = "translateX(-200%)"; //hide sliders
-      content1.style.transitionDelay = "0.3s";
-      content2.style.transitionDelay = "0s";
-      button1.style.color = "#ff7846";
-      button2.style.color = "#000";
-    };
-    button2.onclick = function openCSS() { //sliders click - hide inputs and show sliders
-      content1.style.transform = "translateX(-200%)"; //hide inputs
-      content2.style.transform = "translateX(200%)";
-      content1.style.transitionDelay = "0s";
-      content2.style.transitionDelay = "0.3s";
-      button2.style.color = "#ff7846";
-      button1.style.color = "#000";
-    };
-  </script>
+  <script src="./src/models/service.js"></script>
+  <script src="./src/controllers/templatesHelpers.js"></script>
+  <script src="./src/controllers/helpers.js"></script>
+  <script src="./src/controllers/tabController.js"></script>
+  <script src="./src/controllers/inputsTemplate/changeCurrency.js"></script>
+  <script src="./src/controllers/inputsTemplate/changeEuro.js"></script>
+  <script src="./src/controllers/slidersTemplate/changeCurrency.js"></script>
+  <script src="./src/controllers/slidersTemplate/changeEuro.js"></script>
+  <script src="./src/controllers/inputsTemplate/individualChange.js"></script>
+  <script src="./src/controllers/slidersTemplate/individualChange.js"></script>
 </body>
 
 </html>

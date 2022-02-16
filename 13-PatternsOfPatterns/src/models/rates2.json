@@ -1,0 +1,16 @@
+{
+  "currencies": [
+    {
+      "name": "USD",
+      "rate": 1.25
+    },
+    {
+      "name": "PLN",
+      "rate": 2
+    },
+    {
+      "name": "CHF",
+      "rate": 3
+    }
+  ]
+}
